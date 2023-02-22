@@ -160,11 +160,11 @@ export const authCategories: Array<Categories> = [
 
 export const transactionsCategories: Array<Categories> = [
   {
-    title: "Name",
+    title: "Vendor Name",
     field: "name",
   },
   {
-    title: "Amount",
+    title: "Payment",
     field: "amount",
   },
   {
@@ -402,6 +402,19 @@ export const transformAuthData = (data: AuthGetResponse) => {
     return obj;
   });
 };
+
+// export const transformTransactionsData = (
+//   data: {latest_transactions: Transaction[]}
+// ): Array<DataItem> => {
+//   return data.latest_transactions!.map((t) => {
+//     const item: DataItem = {
+//       name: t.name!,
+//       amount: formatCurrency(t.amount!, t.iso_currency_code),
+//       date: t.date,
+//     };
+//     return item;
+//   });
+// };
 
 export const transformTransactionsData = (
   data: {latest_transactions: Transaction[]}

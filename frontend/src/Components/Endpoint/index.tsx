@@ -7,6 +7,7 @@ import Error from "../Error";
 import { DataItem, Categories, ErrorDataItem, Data } from "../../dataUtilities";
 
 import styles from "./index.module.scss";
+import { TransactionsGetRequest } from "plaid";
 
 interface Props {
   endpoint: string;
@@ -26,13 +27,17 @@ const Endpoint = (props: Props) => {
 
   const getData = async () => {
     setIsLoading(true);
-    const response = await fetch(`/api/${props.endpoint}`, { method: "GET" });
+    // const params = {start_date: '2023-01-25', end_date: '2023-01-27'}
+    console.log("sending request")
+    const response = await fetch(`/api/transactions`, { method: "GET" });
     const data = await response.json();
     if (data.error != null) {
       setError(data.error);
       setIsLoading(false);
       return;
     }
+    console.log("here comes the data")
+    console.log(data)
     setTransformedData(props.transformData(data)); // transform data into proper format for each individual product
     if (data.pdf != null) {
       setPdf(data.pdf);
@@ -41,13 +46,34 @@ const Endpoint = (props: Props) => {
     setIsLoading(false);
   };
 
+  
+
+  // const getData = async () => {
+  //   setIsLoading(true);
+  //   const response = await fetch(`/api/transactions`, { method: "GET" });
+  //   // const response = await fetch(``, { method: "GET" });
+  //   const data = await response.json();
+  //   if (data.error != null) {
+  //     setError(data.error);
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  //   setTransformedData(props.transformData(data)); // transform data into proper format for each individual product
+  //   console.log(transformedData)
+  //   if (data.pdf != null) {
+  //     setPdf(data.pdf);
+  //   }
+  //   setShowTable(true);
+  //   setIsLoading(false);
+  // };
+
   return (
     <>
       <div className={styles.endpointContainer}>
-        <Note info className={styles.post}>
+        {/* <Note info className={styles.post}>
           POST
-        </Note>
-        <div className={styles.endpointContents}>
+        </Note> */}
+        {/* <div className={styles.endpointContents}>
           <div className={styles.endpointHeader}>
             {props.name != null && (
               <span className={styles.endpointName}>{props.name}</span>
@@ -55,30 +81,18 @@ const Endpoint = (props: Props) => {
             <span className={styles.schema}>{props.schema}</span>
           </div>
           <div className={styles.endpointDescription}>{props.description}</div>
-        </div>
+        </div> */}
         <div className={styles.buttonsContainer}>
           <Button
-            small
+            large
             centered
             wide
             secondary
             className={styles.sendRequest}
             onClick={getData}
           >
-            {isLoading ? "Loading..." : `Send request`}
+            {isLoading ? "Loading..." : `Get Results`}
           </Button>
-          {pdf != null && (
-            <Button
-              small
-              centered
-              wide
-              className={styles.pdf}
-              href={`data:application/pdf;base64,${pdf}`}
-              componentProps={{ download: "Asset Report.pdf" }}
-            >
-              Download PDF
-            </Button>
-          )}
         </div>
       </div>
       {showTable && (
